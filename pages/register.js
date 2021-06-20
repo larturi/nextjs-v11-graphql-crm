@@ -1,10 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Layout from '../components/Layout';
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useMutation, gql } from '@apollo/client';
+
+const NUEVA_CUENTA = gql`
+    mutation nuevoUsuario ($input: UsuarioInput) {
+        nuevoUsuario (input: $input) {
+            id,
+            nombre,
+            apellido,
+            email
+        }
+    }  
+`;
 
 const Register = () => {
+
+    // State para el mensaje una vez registrado
+    const [ mensaje, setMensaje ] = useState(null);
+    const [ error, setError ] = useState(null);
+
+    // Mutation para crear una nueva cuenta
+    const [ nuevoUsuario ] = useMutation(NUEVA_CUENTA);
 
     // Validacion del formulario
     const formik = useFormik({
@@ -20,23 +39,59 @@ const Register = () => {
             email: Yup.string().email('El email debe tener un formato válido').required('El email es obligatorio'),
             password: Yup.string().required('El password es obligatorio').min(6, 'Minimo 6 caracteres'),
         }),
-        onSubmit: valores => {
-            console.log('Enviando...');
-            console.log(valores);
+        onSubmit: async valores => {
+            const { nombre, apellido, email, password } = valores;
+
+            try {
+                await nuevoUsuario({
+                    variables: {
+                        input: {
+                            nombre,
+                            apellido,
+                            email,
+                            password
+                        }
+                    }
+                });
+
+                setMensaje('Usuario creado correctamente');
+                setTimeout(() => {
+                    setMensaje(null);
+                }, 3000);
+
+            } catch (error) {
+                setMensaje(error.message.replace('GraphQL error:', ''));
+                setError(true);
+                setTimeout(() => {
+                    setMensaje(null);
+                    setError(null);
+                }, 3000);
+            }
         }
     });
+
+    const mostrarMensaje = () => {
+        return (
+            <div className={"py-3 max-w-md mt-3 -mb-2 text-white rounded my-3 text-center mx-auto " + (error ? 'bg-red-700' : 'bg-green-700') }>
+                <p>{mensaje}</p>
+            </div>
+        )
+    }
 
     return (
         <>
             <Layout>
+
                 <h1 className="text-center text-2xl text-white font-light">Crear Nueva Cuenta</h1>
 
                 <div className="flex justify-center mt-5">
+                
                     <div className="w-full max-w-md px-4">
                         <form
                             className="bg-white rounded shadow-md px-8 pt-6 pb-8 mb-4"
                             onSubmit={formik.handleSubmit}
                         >
+
                             <div className="mt-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="nombre">
                                     Nombre
@@ -126,9 +181,14 @@ const Register = () => {
                                 className="bg-gray-800 w-full mt-5 p-2 text-white uppercase hover:bg-gray-900"
                                 value="Crear Cuenta"
                             />
+
+                            { mensaje && mostrarMensaje() }
+
                         </form>
                     </div>
+                    
                 </div>
+
             </Layout>
         </>
     )
