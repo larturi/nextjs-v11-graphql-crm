@@ -1,7 +1,85 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Layout from '../components/Layout';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { gql, useMutation } from '@apollo/client';
+import { useRouter } from 'next/router';
+
+const AUTENTICAR_USUARIO = gql`
+    mutation autenticarUsuario ($input: AutenticarInput) {
+        autenticarUsuario (input: $input) {
+            token
+        }
+    }
+`;
 
 const Login = () => {
+
+    // Routing
+    const router = useRouter();
+
+    // States para mensajes del formulario
+    const [ mensaje, setMensaje ] = useState(null);
+    const [ error, setError ] = useState(null);
+
+    const [ autenticarUsuario ] = useMutation(AUTENTICAR_USUARIO);
+
+    const formik = useFormik({
+        initialValues: {
+            email: '',
+            password: ''
+        },
+        validationSchema: Yup.object({
+            email: Yup.string()
+                      .email('Debe ingresar un email válido')
+                      .required('El email es obligatorio'),
+            password: Yup.string()
+                         .min(6, 'Mínimo 6 caracteres')
+                         .required('El password es obligatorio'),
+        }),
+        onSubmit: async valores => {
+
+            const { email, password } = valores;
+            try {
+                
+                const { data } = await autenticarUsuario({
+                    variables: {
+                        input: {
+                            email,
+                            password
+                        }
+                    }
+                });
+
+                setMensaje('Ingresando...');
+                setTimeout(() => {
+                    setMensaje(null);
+                    router.push('/');
+                }, 1000);
+
+                // Guardar token en LocalStorage
+                const { token } = data.autenticarUsuario;
+                localStorage.setItem('token', token);
+
+            } catch (error) {
+                setMensaje(error.message.replace('GraphQL error:', ''));
+                setError(true);
+                setTimeout(() => {
+                    setMensaje(null);
+                    setError(null);
+                }, 3000);
+            }
+        }
+    });
+
+    const mostrarMensaje = () => {
+        return (
+            <div className={"py-3 max-w-md mt-3 -mb-2 text-white rounded my-3 text-center mx-auto " + (error ? 'bg-red-700' : 'bg-green-700') }>
+                <p>{mensaje}</p>
+            </div>
+        )
+    };
+
     return (
         <>
             <Layout>
@@ -11,6 +89,7 @@ const Login = () => {
                     <div className="w-full max-w-md px-4">
                         <form
                             className="bg-white rounded shadow-md px-8 pt-6 pb-8 mb-4"
+                            onSubmit={formik.handleSubmit}
                         >
                             <div>
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
@@ -21,8 +100,17 @@ const Login = () => {
                                     id="email"
                                     type="email"
                                     placeholder="Email"
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    value={formik.values.email}
                                 />
                             </div>
+
+                            { formik.touched.email &&formik.errors.email ? (
+                                <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-3">
+                                    <p>{formik.errors.email}</p>
+                                </div>
+                            ) : null }
 
                             <div className="mt-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
@@ -33,14 +121,26 @@ const Login = () => {
                                     id="password"
                                     type="password"
                                     placeholder="Password"
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    value={formik.values.password}
                                 />
                             </div>
 
+                            { formik.touched.password && formik.errors.password ? (
+                                <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-3">
+                                    <p>{formik.errors.password}</p>
+                                </div>
+                            ) : null }
+
                             <input 
                                 type="submit"
-                                className="bg-gray-800 w-full mt-5 p-2 text-white uppercase hover:bg-gray-900"
+                                className="bg-gray-800 w-full mt-5 p-2 cursor-pointer text-white uppercase hover:bg-gray-900"
                                 value="Iniciar Sesión"
                             />
+
+                            { mensaje && mostrarMensaje() }
+
                         </form>
                     </div>
                 </div>
