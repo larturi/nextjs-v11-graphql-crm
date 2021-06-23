@@ -38,12 +38,12 @@ const Header = () => {
             {
                 (!loading && data.obtenerUsuario) ?
                 <div className="flex justify-between mb-6">
-                    <p className="mr-2">Hola { data.obtenerUsuario.nombre }</p>
+                    <p className="mr-2">Hola { data.obtenerUsuario.nombre } 👋 </p>
 
                     <button
                         onClick={ () => cerrarSesion() }
                         type="button"
-                        className="bg-blue-800 w-full sm:w-auto font-bold text-white rounded py-3 px-5 text-xs uppercase shadow-md"
+                        className="bg-blue-800 w-full sm:w-auto font-bold text-white rounded py-3 px-5 text-xs uppercase shadow-md hover:bg-gray-800"
                     >
                         Cerrar Sesión
                     </button>
