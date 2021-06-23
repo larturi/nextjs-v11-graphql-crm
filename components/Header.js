@@ -21,15 +21,12 @@ const Header = () => {
 
     const { data, loading, error } = useQuery(OBTENER_USUARIO);
 
-    // Proteger que no accedamos a data antes de tener resultados
-    if(loading) return null;
-
     // Si no hay informacion
-    if(!data) {
-        return router.push('/login');
-    }
+    // if(!data.obtenerUsuario) {
+    //     return router.push('/login');
+    // }
 
-    const { nombre } = data.obtenerUsuario;
+    // const { nombre } = data.obtenerUsuario;
 
     const cerrarSesion = () => {
         localStorage.removeItem('token');
@@ -37,17 +34,22 @@ const Header = () => {
     }
 
     return (
-        <div className="flex justify-between mb-6">
-            <p className="mr-2">Hola {nombre}</p>
+        <>
+            {
+                (!loading && data.obtenerUsuario) ?
+                <div className="flex justify-between mb-6">
+                    <p className="mr-2">Hola { data.obtenerUsuario.nombre }</p>
 
-            <button
-                onClick={ () => cerrarSesion() }
-                type="button"
-                className="bg-blue-800 w-full sm:w-auto font-bold text-white rounded py-3 px-5 text-xs uppercase shadow-md"
-            >
-                Cerrar Sesión
-            </button>
-        </div>
+                    <button
+                        onClick={ () => cerrarSesion() }
+                        type="button"
+                        className="bg-blue-800 w-full sm:w-auto font-bold text-white rounded py-3 px-5 text-xs uppercase shadow-md"
+                    >
+                        Cerrar Sesión
+                    </button>
+                </div> : null
+            }
+        </>
     )
 }
 

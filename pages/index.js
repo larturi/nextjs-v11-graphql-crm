@@ -25,11 +25,14 @@ const Index = () => {
   const { data, loading, error } = useQuery(OBTENER_CLIENTES_USUARIO);
 
   if(!loading && !data.obtenerClientesVendedor) {
-    window.location.replace('/login');
+    // window.location.replace('/login');
+    router.push('/login');
   }
 
   return (
-    <div>
+    <>
+    { (!loading && data.obtenerClientesVendedor) ?
+      <div>
         <Layout>
           
           <h1 className="text-2xl text-gray-800 font-light">Clientes</h1>
@@ -45,7 +48,7 @@ const Index = () => {
 
                 <tbody className="bg-white">
                   {
-                    (!loading && data.obtenerClientesVendedor) ? 
+                    (data.obtenerClientesVendedor) ? 
                       data.obtenerClientesVendedor.map( cliente => (
                         <tr key={cliente.id}>
                           <td className="border px-4 py-2">{ cliente.nombre } { cliente.apellido }</td>
@@ -61,7 +64,10 @@ const Index = () => {
           </table>
 
         </Layout>
-      </div>
+      </div> : null
+      }
+    </>
+    
   )
   
 };
