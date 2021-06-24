@@ -1,11 +1,48 @@
 import React from 'react';
+
+import Router from 'next/router';
+import { gql, useMutation } from '@apollo/client';
 import Swal from 'sweetalert2';
+
+const ELIMINAR_CLIENTE = gql`
+    mutation eliminarCliente($id: ID!) {
+        eliminarCliente(id: $id) 
+    }
+`;
+
+const OBTENER_CLIENTES_USUARIO = gql`
+  query obtenerClientesVendedor{
+    obtenerClientesVendedor{
+      id
+      nombre
+      apellido
+      email
+      empresa
+      vendedor
+    }
+  }
+`;
 
 const Cliente = ({ cliente }) => {
 
+    const [ eliminarCliente ] = useMutation(ELIMINAR_CLIENTE, {
+        update(cache) {
+            // Obtener una copia del objeto en cache
+            const { obtenerClientesVendedor } = cache.readQuery({ query: OBTENER_CLIENTES_USUARIO });
+
+            // Reescribir el cache
+            cache.writeQuery({
+                query: OBTENER_CLIENTES_USUARIO,
+                data: {
+                    obtenerClientesVendedor: obtenerClientesVendedor.filter( cliente => cliente.id !== id)
+                }
+            });
+        }
+    });
+
     const { id, nombre, apellido, email, empresa } = cliente;
 
-    const confirmarEliminarCliente = (id) => {
+    const confirmarEliminarCliente = () => {
         Swal.fire({
             title: 'Deseas eliminar este cliente?',
             text: "Esta accion no se puede deshacer!",
@@ -15,17 +52,36 @@ const Cliente = ({ cliente }) => {
             cancelButtonColor: '#d33',
             confirmButtonText: 'Si, eliminar',
             cancelButtonText: 'Cancelar'
-          }).then((result) => {
+          }).then( async (result) => {
             if (result.isConfirmed) {
-                console.log('Eliminando...', id);
-                Swal.fire(
-                  'Eliminado!',
-                  'El cliente ha sido eliminado.',
-                  'success'
-                )
+                
+                try {
+                    const { data } = await eliminarCliente({
+                        variables: {
+                            id
+                        }
+                    });
+
+                    Swal.fire(
+                        'Eliminado!',
+                        data.eliminarCliente,
+                        'success'
+                    );
+                    
+                } catch (error) {
+                    console.error(error);    
+                }
+
             }
             })
     };
+
+    const editarCliente = () => {
+        Router.push({
+            pathname: '/editarcliente/[id]',
+            query: {id}
+        })
+    }
 
     return (
         <tr>
@@ -36,10 +92,21 @@ const Cliente = ({ cliente }) => {
                 <button
                     type="button"
                     className="flex justify-center items-center bg-red-800 py-2 px-4 w-full text-white rounded text-xs uppercase font-bold"
-                    onClick={ () => confirmarEliminarCliente(id) }
+                    onClick={ () => confirmarEliminarCliente() }
                >
-                    Elininar
+                    Eliminar
                     <svg className="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </button>    
+            </td>
+
+            <td className="border px-4 py-2">
+                <button
+                    type="button"
+                    className="flex justify-center items-center bg-indigo-600 py-2 px-4 w-full text-white rounded text-xs uppercase font-bold"
+                    onClick={ () => editarCliente() }
+               >
+                    Editar
+                    <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                 </button>    
             </td>
         </tr>
