@@ -3,18 +3,9 @@ import Layout from '../components/Layout';
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useMutation, gql } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 
-const NUEVA_CUENTA = gql`
-    mutation nuevoUsuario ($input: UsuarioInput) {
-        nuevoUsuario (input: $input) {
-            id,
-            nombre,
-            apellido,
-            email
-        }
-    }  
-`;
+import { NUEVA_CUENTA } from '../config/gql';
 
 const Register = () => {
 

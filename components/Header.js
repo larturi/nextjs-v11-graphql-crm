@@ -1,19 +1,8 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 
-import { gql, useQuery } from '@apollo/client';
-
-const OBTENER_USUARIO = gql`
-    query obtenerUsuario {
-        obtenerUsuario {
-            id
-            nombre
-            apellido
-            email
-            creado
-        }
-    }
-`;
+import { useQuery } from '@apollo/client';
+import { OBTENER_USUARIO } from '../config/gql';
 
 const Header = () => {
 
@@ -22,11 +11,6 @@ const Header = () => {
     const { data, loading, error } = useQuery(OBTENER_USUARIO);
 
     // Si no hay informacion
-    // if(!data.obtenerUsuario) {
-    //     return router.push('/login');
-    // }
-
-    // const { nombre } = data.obtenerUsuario;
 
     const cerrarSesion = () => {
         localStorage.removeItem('token');

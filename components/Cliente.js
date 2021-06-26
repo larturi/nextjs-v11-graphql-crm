@@ -1,27 +1,10 @@
 import React from 'react';
 
 import Router from 'next/router';
-import { gql, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import Swal from 'sweetalert2';
 
-const ELIMINAR_CLIENTE = gql`
-    mutation eliminarCliente($id: ID!) {
-        eliminarCliente(id: $id) 
-    }
-`;
-
-const OBTENER_CLIENTES_USUARIO = gql`
-  query obtenerClientesVendedor{
-    obtenerClientesVendedor{
-      id
-      nombre
-      apellido
-      email
-      empresa
-      vendedor
-    }
-  }
-`;
+import { ELIMINAR_CLIENTE, OBTENER_CLIENTES_USUARIO } from '../config/gql';
 
 const Cliente = ({ cliente }) => {
 

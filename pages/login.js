@@ -1,17 +1,12 @@
 import React, { useState } from 'react';
-import Layout from '../components/Layout';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { gql, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
 
-const AUTENTICAR_USUARIO = gql`
-    mutation autenticarUsuario ($input: AutenticarInput) {
-        autenticarUsuario (input: $input) {
-            token
-        }
-    }
-`;
+import Layout from '../components/Layout';
+
+import { AUTENTICAR_USUARIO } from '../config/gql';
 
 const Login = () => {
 

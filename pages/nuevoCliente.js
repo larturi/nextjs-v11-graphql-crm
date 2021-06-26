@@ -1,38 +1,15 @@
 import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { gql, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
+import Swal from 'sweetalert2';
 
 import Layout from '../components/Layout';
 
-const NUEVO_CLIENTE = gql`
-mutation nuevoCliente($input: ClienteInput){
-    nuevoCliente(input: $input) {
-      id
-      nombre
-      apellido
-      empresa
-      email
-      telefono
-    }
-  }
-`;
+import { NUEVO_CLIENTE, OBTENER_CLIENTES_USUARIO } from '../config/gql';
 
-const OBTENER_CLIENTES_USUARIO = gql`
-  query obtenerClientesVendedor{
-    obtenerClientesVendedor{
-      id
-      nombre
-      apellido
-      email
-      empresa
-      vendedor
-    }
-  }
-`;
-
-const nuevoCliente = () => {
+const NuevoCliente = () => {
 
     const router = useRouter();
 
@@ -92,7 +69,15 @@ const nuevoCliente = () => {
                         }
                     }
                 });
+
                 router.push('/');
+
+                Swal.fire(
+                    'Cliente Creado!',
+                    'Cliente creado correctamente',
+                    'success'
+                );
+
             } catch (error) {
                 setMensaje(error.message.replace('GraphQL error: ', ''));
 
@@ -244,4 +229,4 @@ const nuevoCliente = () => {
     )
 };
 
-export default nuevoCliente;
+export default NuevoCliente;

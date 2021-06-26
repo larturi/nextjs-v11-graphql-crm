@@ -7,35 +7,7 @@ import * as Yup from 'yup';
 import Swal from 'sweetalert2';
 
 import Layout from '../../components/Layout';
-
-const OBTENER_CLIENTE = gql`
-    query obtenerCliente($id: ID!){
-        obtenerCliente(id: $id) {
-            id
-            nombre
-            apellido
-            email
-            empresa
-            vendedor,
-            telefono
-        }
-    }
-`;
-
-const ACTUALIZAR_CLIENTE = gql`
-    mutation actualizarCliente($id: ID!, $input: ClienteInput) {
-        actualizarCliente(id: $id, input: $input) {
-            id
-            nombre
-            apellido
-            email
-            empresa
-            vendedor
-            telefono
-        }
-    }
-`;
-
+import { OBTENER_CLIENTE, ACTUALIZAR_CLIENTE } from '../../config/gql';
 
 const EditarCliente = () => {
 
