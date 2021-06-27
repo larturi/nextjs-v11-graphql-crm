@@ -4,10 +4,14 @@ import client from '../config/apollo';
 import '../styles/globals.css';
 import 'tailwindcss/tailwind.css';
 
+import PedidoState from '../context/pedidos/pedidoState';
+
 const MyApp = ({ Component, pageProps }) => {
   return (
     <ApolloProvider client={client}>
-      <Component {...pageProps} />
+      <PedidoState>
+        <Component {...pageProps} />
+      </PedidoState>
     </ApolloProvider>
   )
 }

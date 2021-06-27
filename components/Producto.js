@@ -44,8 +44,6 @@ const Producto = ({producto}) => {
                         }
                     });
 
-                    console.log(data);
-
                     Swal.fire(
                         'Producto eliminado',
                         'El producto ha sido eliminado correctamente',
