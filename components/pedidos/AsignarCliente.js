@@ -39,9 +39,8 @@ const AsignarCliente = () => {
                 getOptionLabel={ options => options.nombre }
                 placeholder="Selecccione el cliente"
                 noOptionsMessage={ () => "No hay resultados"}
-                instanceId="id"
+                instanceId="cliente"
             />
-
         </>
     )
 };
