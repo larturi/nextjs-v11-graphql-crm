@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import PedidoContext from '../../context/pedidos/PedidoContext';
 import ProductoResumen from './ProductoResumen';
 
@@ -6,7 +6,11 @@ const ResumenPedido = () => {
 
     // Context Pedidos
     const pedidoContext = useContext(PedidoContext);
-    const { productos } = pedidoContext;
+    const { productos, actualizarTotal } = pedidoContext;
+
+    useEffect(() => {
+        actualizarTotal();
+    }, [productos])
 
     return (
         <>
