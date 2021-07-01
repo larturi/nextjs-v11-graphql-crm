@@ -10,9 +10,16 @@ query obtenerPedidosVendedor {
     pedido {
       id
       cantidad
+      nombre
     }
     total
-    cliente
+    cliente {
+      id
+      nombre
+      apellido
+      email
+      telefono
+    }
     vendedor
     fecha
     estado
