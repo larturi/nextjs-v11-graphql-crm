@@ -10,13 +10,14 @@ import AsignarProductos from '../components/pedidos/AsignarProductos';
 import ResumenPedido from '../components/pedidos/ResumenPedido';
 import Total from '../components/pedidos/Total';
 
+import { OBTENER_PEDIDOS_VENDEDOR } from '../config/gql';
 
 const NUEVO_PEDIDO = gql`
-mutation nuevoPedido($input: PedidoInput){
-    nuevoPedido(input:$input) {
-      id
+    mutation nuevoPedido($input: PedidoInput){
+        nuevoPedido(input:$input) {
+        id
+        }
     }
-}
 `;
 
 // Context de Pedidos
@@ -33,7 +34,20 @@ const NuevoPedido = () => {
     const { cliente, productos, total } = pedidoContext;
 
     // Mutation para crear un nuevo pedido
-    const [ nuevoPedido ] = useMutation(NUEVO_PEDIDO);
+    const [ nuevoPedido ] = useMutation(NUEVO_PEDIDO, {
+        update(cache, { data: { nuevoPedido }}) {
+            const { obtenerPedidosVendedor } = cache.readQuery({
+                query: OBTENER_PEDIDOS_VENDEDOR
+            });
+
+            cache.writeQuery({
+                query: OBTENER_PEDIDOS_VENDEDOR,
+                data: {
+                    obtenerPedidosVendedor: [...obtenerPedidosVendedor, nuevoPedido]
+                }
+            });
+        }
+    });
 
     const validarPedido = () => {
         return !productos.every( producto => producto.cantidad > 0 ) || total === 0 || cliente.length === 0 ? " opacity-50 cursor-not-allowed " : "";

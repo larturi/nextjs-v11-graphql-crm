@@ -1,8 +1,48 @@
 import React, { useState, useEffect } from 'react';
+import { gql, useMutation } from '@apollo/client';
+
+import Swal from 'sweetalert2';
+
+import { OBTENER_PEDIDOS_VENDEDOR } from '../../config/gql';
+
+const ACTUALIZAR_PEDIDO = gql`
+    mutation actualizarPedido($id: ID!, $input: PedidoInput){
+        actualizarPedido(id: $id, input: $input) {
+            estado
+        }
+    }
+`;
+
+const ELIMINAR_PEDIDO = gql`
+    mutation eliminarPedido($id: ID!) {
+        eliminarPedido(id: $id) {
+            id
+        }
+    }
+`;
 
  const Pedido = ({pedido}) => {
 
-    const { id, total, cliente: { nombre, apellido, telefono, email}, estado } = pedido;
+    const { id, total, cliente: { nombre, apellido, telefono, email}, estado, cliente } = pedido;
+
+    // Mutation para cambiar el estado de un pedido
+    const [ actualizarPedido ] = useMutation(ACTUALIZAR_PEDIDO);
+
+    // Mutation para eliminar un pedido
+    const [ eliminarPedido ] = useMutation(ELIMINAR_PEDIDO, {
+        update(cache) {
+            const { obtenerPedidosVendedor } = cache.readQuery({
+                query: OBTENER_PEDIDOS_VENDEDOR
+            });
+            
+            cache.writeQuery({
+                query: OBTENER_PEDIDOS_VENDEDOR,
+                data: {
+                    obtenerPedidosVendedor: obtenerPedidosVendedor.filter( pedido => pedido.id !== id)
+                }
+            })
+        }
+    });
 
     const [estadoPedido, setEstadoPedido] = useState(estado);
     const [clase, setClase] = useState('');
@@ -25,6 +65,57 @@ import React, { useState, useEffect } from 'react';
         clasePedido();
     }, [estadoPedido]);
 
+    const cambiarEstadoPedido = async nuevoEstado => {
+        try {
+            const { data } = await actualizarPedido({
+                variables: {
+                    id,
+                    input: {
+                        estado: nuevoEstado,
+                        cliente: cliente.id
+                    }
+                }
+            });
+            setEstadoPedido(data.actualizarPedido.estado);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const confirmarEliminarPedido = () => {
+        Swal.fire({
+            title: 'Deseas eliminar este pedido?',
+            text: "Esta accion no se puede deshacer!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, eliminar',
+            cancelButtonText: 'Cancelar'
+          }).then( async (result) => {
+            if (result.isConfirmed) {
+                
+                try {
+                    await eliminarPedido({
+                        variables: {
+                            id
+                        }
+                    });
+
+                    Swal.fire(
+                        'Eliminado!',
+                        'Pedido eliminado correctamente',
+                        'success'
+                    );
+                    
+                } catch (error) {
+                    console.error(error);    
+                }
+
+            }
+        });
+    };
+ 
     return (
         <div className={`${clase} border-t-4 mt-4 bg-white rounded p-6 md:grid md:grid-cols-2 md:gap-4 shadow-lg`}>
             <div>
@@ -50,6 +141,7 @@ import React, { useState, useEffect } from 'react';
                                  text-blue-700 p-2 text-center rounded leading-tight text-xm font-bold
                                  focus:outline-none focus:border-blue-500 uppercase"
                         value={estadoPedido}
+                        onChange={ e => cambiarEstadoPedido(e.target.value) }
                 >
                     <option value="COMPLETADO">COMPLETADO</option>
                     <option value="PENDIENTE">PENDIENTE</option>
@@ -79,6 +171,7 @@ import React, { useState, useEffect } from 'react';
                 <button
                     className="flex items-center mt-4 bg-red-800 px-5 py-2 uppercase text-xs
                                inline-block text-white rounded leading-tight font-bold"
+                    onClick={ () => confirmarEliminarPedido() }
                 >
                     Eliminar 
                     <svg className="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>

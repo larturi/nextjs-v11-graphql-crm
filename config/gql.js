@@ -147,3 +147,27 @@ export const ACTUALIZAR_PRODUCTO = gql`
         }
     }
 `;
+
+export const OBTENER_PEDIDOS_VENDEDOR = gql`
+  query obtenerPedidosVendedor {
+    obtenerPedidosVendedor {
+      id
+      pedido {
+        id
+        cantidad
+        nombre
+      }
+      total
+      cliente {
+        id
+        nombre
+        apellido
+        email
+        telefono
+      }
+      vendedor
+      fecha
+      estado
+    }
+  }
+`;

@@ -3,29 +3,7 @@ import Link from 'next/link';
 import { gql, useQuery } from '@apollo/client';
 import Pedido from '../components/pedidos/pedido';
 
-const OBTENER_PEDIDOS_VENDEDOR = gql`
-query obtenerPedidosVendedor {
-  obtenerPedidosVendedor {
-    id
-    pedido {
-      id
-      cantidad
-      nombre
-    }
-    total
-    cliente {
-      id
-      nombre
-      apellido
-      email
-      telefono
-    }
-    vendedor
-    fecha
-    estado
-  }
-}
-`;
+import { OBTENER_PEDIDOS_VENDEDOR } from '../config/gql';
 
 const Pedidos = () => {
 
