@@ -60,9 +60,7 @@ const Login = () => {
                     localStorage.setItem('token', token);
                     setMensaje(null);
                     login();
-                    router.push('/');
-                    //window.location.replace('/crm-next-apollo');
-                    //window.location.replace('/');
+                    router.push('/crm-next-apollo');
                 }
 
             } catch (error) {

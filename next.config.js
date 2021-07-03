@@ -1,5 +1,5 @@
 module.exports = {
-    // basePath: '/crm-next-apollo',
+    basePath: '/crm-next-apollo',
     trailingSlash: true
 }
 
