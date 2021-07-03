@@ -11,6 +11,7 @@ import { OBTENER_CLIENTES_USUARIO } from '../config/gql';
 
 const Index = () => {
 
+
   const router = useRouter();
 
   const { data, loading, error } = useQuery(OBTENER_CLIENTES_USUARIO, {

@@ -2,6 +2,7 @@
 import {
     LOGIN_USUARIO,
     LOGOUT_USUARIO,
+    CHECK_TOKEN_LOCALSTORAGE
 } from '../../types';
 
 export default (state, action) => {
@@ -18,6 +19,12 @@ export default (state, action) => {
             return {
                 ...state,
                 isAuthenticated: false,
+            }
+
+        case CHECK_TOKEN_LOCALSTORAGE:
+            return {
+                ...state,
+                isAuthenticated: action.payload,
             }
 
         default:

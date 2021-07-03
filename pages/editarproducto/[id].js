@@ -22,7 +22,7 @@ const EditarProducto = () => {
     const { isAuthenticated } = authContext;
 
     useEffect(() => {
-        if (!isAuthenticated) {
+        if (!isAuthenticated && localStorage.getItem('token') === null) {
             router.push('/login');  
         }
     }, []);
