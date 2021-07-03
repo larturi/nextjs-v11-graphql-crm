@@ -92,13 +92,14 @@ export const ELIMINAR_CLIENTE = gql`
 `;
 
 export const OBTENER_PRODUCTOS = gql`
-  query obtenerProductos {
-    obtenerProductos {
+  query obtenerProductos($eliminado: Boolean!) {
+    obtenerProductos(eliminado: $eliminado) {
       id
       nombre
       stock
       precio
       creado
+      eliminado
     }
   }
 `;

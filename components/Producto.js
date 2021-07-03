@@ -10,11 +10,17 @@ const Producto = ({producto}) => {
     const [ eliminarProducto ] = useMutation(ELIMINAR_PRODUCTO, {
         update(cache) {
             const { obtenerProductos } = cache.readQuery({
-                query: OBTENER_PRODUCTOS
+                query: OBTENER_PRODUCTOS,
+                variables: {
+                    eliminado: false
+                }
             });
 
             cache.writeQuery({
                 query: OBTENER_PRODUCTOS,
+                variables: {
+                    eliminado: false
+                },
                 data: {
                     obtenerProductos: obtenerProductos.filter( producto => producto.id !== id )
                 }

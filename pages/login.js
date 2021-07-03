@@ -35,6 +35,7 @@ const Login = () => {
         onSubmit: async valores => {
 
             const { email, password } = valores;
+
             try {
                 
                 const { data } = await autenticarUsuario({
@@ -46,17 +47,32 @@ const Login = () => {
                     }
                 });
 
-                setMensaje('Ingresando...');
-                setTimeout(() => {
-                    setMensaje(null);
-                    router.push('/');
-                }, 1000);
 
-                setTimeout(() => {
-                   // Guardar token en LocalStorage
+
+                if (data.autenticarUsuario.token) {
+                    setMensaje('Ingresando...');
                     const { token } = data.autenticarUsuario;
-                    localStorage.setItem('token', token); 
-                }, 1000);
+                    localStorage.setItem('token', token);
+                    setMensaje(null);
+                    console.log('Acceso ok'); 
+                    window.location.replace('/');
+                }
+
+                // setTimeout(() => {
+                //    // Guardar token en LocalStorage
+                //     const { token } = data.autenticarUsuario;
+                //     localStorage.setItem('token', token); 
+
+                    
+
+                // }, 1500);
+
+                // setTimeout(() => {
+                //     setMensaje(null);
+                //     console.log('Acceso ok');
+                //     router.push('/');
+                //     //window.location.replace('/');
+                // }, 1000);
 
             } catch (error) {
                 setMensaje(error.message.replace('GraphQL error:', ''));

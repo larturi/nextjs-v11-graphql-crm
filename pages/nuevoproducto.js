@@ -15,10 +15,18 @@ const NuevoProducto = () => {
     // Mutation de Apollo
     const [ nuevoProducto ] = useMutation(NUEVO_PRODUCTO, {
         update(cache, {data: { nuevoProducto }}) {
-            const { obtenerProductos } = cache.readQuery({ query: OBTENER_PRODUCTOS});
+            const { obtenerProductos } = cache.readQuery({ 
+                query: OBTENER_PRODUCTOS, 
+                variables: {
+                    eliminado: false
+                }
+            });
 
             cache.writeQuery({
                 query: OBTENER_PRODUCTOS,
+                variables: {
+                    eliminado: false
+                },
                 data: {
                     obtenerProductos: [...obtenerProductos, nuevoProducto ]
                 }

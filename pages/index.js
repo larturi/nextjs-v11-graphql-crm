@@ -16,7 +16,6 @@ const Index = () => {
   const { data, loading, error } = useQuery(OBTENER_CLIENTES_USUARIO);
 
   if(!loading && !data.obtenerClientesVendedor) {
-    // window.location.replace('/login');
     router.push('/login');
   }
 

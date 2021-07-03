@@ -10,7 +10,11 @@ import { OBTENER_PRODUCTOS } from '../config/gql';
 const Productos = () => {
 
   // Consultar los productos
-  const { data, loading, error } = useQuery(OBTENER_PRODUCTOS);
+  const { data, loading, error } = useQuery(OBTENER_PRODUCTOS, {
+    variables: {
+      eliminado: false
+    }
+});
 
   if (loading) {
     return 'Cargando...';
