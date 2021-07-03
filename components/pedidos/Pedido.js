@@ -32,11 +32,17 @@ const ELIMINAR_PEDIDO = gql`
     const [ eliminarPedido ] = useMutation(ELIMINAR_PEDIDO, {
         update(cache) {
             const { obtenerPedidosVendedor } = cache.readQuery({
-                query: OBTENER_PEDIDOS_VENDEDOR
+                query: OBTENER_PEDIDOS_VENDEDOR,
+                variables: {
+                    eliminado: false
+                }
             });
             
             cache.writeQuery({
                 query: OBTENER_PEDIDOS_VENDEDOR,
+                variables: {
+                    eliminado: false
+                },
                 data: {
                     obtenerPedidosVendedor: obtenerPedidosVendedor.filter( pedido => pedido.id !== id)
                 }
