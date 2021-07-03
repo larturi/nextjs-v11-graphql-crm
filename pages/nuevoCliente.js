@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useMutation } from '@apollo/client';
@@ -9,11 +9,24 @@ import Layout from '../components/Layout';
 
 import { NUEVO_CLIENTE, OBTENER_CLIENTES_USUARIO } from '../config/gql';
 
+// Context de Auth
+import AuthContext from '../context/auth/AuthContext';
+
 const NuevoCliente = () => {
 
     const router = useRouter();
 
     const [ mensaje, setMensaje ] = useState(null);
+
+    // Utilizar Context Auth
+    const authContext = useContext(AuthContext);
+    const { isAuthenticated } = authContext;
+
+    useEffect(() => {
+        if (!isAuthenticated) {
+            router.push('/login');  
+        }
+    }, []);
 
     const [ nuevoCliente ] = useMutation(NUEVO_CLIENTE, {
         update(cache, { data: { nuevoCliente }}) {
@@ -105,6 +118,7 @@ const NuevoCliente = () => {
     };
 
     return (
+        isAuthenticated &&
         <Layout>
             <h1 className="text-2xl text-gray-800 font-light">Nuevo Cliente</h1>
 

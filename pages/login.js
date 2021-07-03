@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useMutation } from '@apollo/client';
@@ -8,10 +8,17 @@ import Layout from '../components/Layout';
 
 import { AUTENTICAR_USUARIO } from '../config/gql';
 
+// Context de Auth
+import AuthContext from '../context/auth/AuthContext';
+
 const Login = () => {
 
     // Routing
     const router = useRouter();
+
+    // Utilizar Context Auth
+    const authContext = useContext(AuthContext);
+    const { isAuthenticated, login } = authContext;
 
     // States para mensajes del formulario
     const [ mensaje, setMensaje ] = useState(null);
@@ -47,32 +54,16 @@ const Login = () => {
                     }
                 });
 
-
-
                 if (data.autenticarUsuario.token) {
                     setMensaje('Ingresando...');
                     const { token } = data.autenticarUsuario;
                     localStorage.setItem('token', token);
                     setMensaje(null);
-                    console.log('Acceso ok'); 
-                    window.location.replace('/');
+                    login();
+                    router.push('/');
+                    //window.location.replace('/crm-next-apollo');
+                    //window.location.replace('/');
                 }
-
-                // setTimeout(() => {
-                //    // Guardar token en LocalStorage
-                //     const { token } = data.autenticarUsuario;
-                //     localStorage.setItem('token', token); 
-
-                    
-
-                // }, 1500);
-
-                // setTimeout(() => {
-                //     setMensaje(null);
-                //     console.log('Acceso ok');
-                //     router.push('/');
-                //     //window.location.replace('/');
-                // }, 1000);
 
             } catch (error) {
                 setMensaje(error.message.replace('GraphQL error:', ''));

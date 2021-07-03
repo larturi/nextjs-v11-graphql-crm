@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
 
 import { useQuery, useMutation } from '@apollo/client';
@@ -9,10 +9,23 @@ import Swal from 'sweetalert2';
 import Layout from '../../components/Layout';
 import { OBTENER_PRODUCTO, ACTUALIZAR_PRODUCTO } from '../../config/gql';
 
+// Context de Auth
+import AuthContext from '../../context/auth/AuthContext';
+
 const EditarProducto = () => {
 
     const router = useRouter();
     const { query: { id } } = router;
+
+    // Utilizar Context Auth
+    const authContext = useContext(AuthContext);
+    const { isAuthenticated } = authContext;
+
+    useEffect(() => {
+        if (!isAuthenticated) {
+            router.push('/login');  
+        }
+    }, []);
 
     // Obtengo el Producto  para precargar el formulario
     const { data, loading, error } = useQuery(OBTENER_PRODUCTO, {
@@ -74,6 +87,7 @@ const EditarProducto = () => {
         const { obtenerProducto } = data;
 
         return (
+            isAuthenticated &&
             <Layout>
                 <h1 className="text-2xl text-gray-800 font-light">Editar Producto</h1>
 

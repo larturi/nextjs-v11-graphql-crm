@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 import { gql, useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
@@ -23,11 +23,24 @@ const NUEVO_PEDIDO = gql`
 // Context de Pedidos
 import PedidoContext from '../context/pedidos/PedidoContext';
 
+// Context Auth
+import AuthContext from '../context/auth/AuthContext';
+
 const NuevoPedido = () => {
 
     const router = useRouter();
 
     const [mensaje, setMensaje] = useState(null);
+
+    // Utilizar Context Auth
+    const authContext = useContext(AuthContext);
+    const { isAuthenticated } = authContext;
+
+    useEffect(() => {
+        if (!isAuthenticated) {
+            router.push('/login');  
+        }
+    }, []);
 
     // Utilizar Context y extraer sus valores y funciones
     const pedidoContext = useContext(PedidoContext);
@@ -63,8 +76,6 @@ const NuevoPedido = () => {
         
         // Armo el arreglo de productos con lo que pide graphQL
         const pedido = productos.map( ( {stock, eliminado, creado, __typename, ...producto} ) => producto );
-
-        console.log(pedido);
 
         try {
             const { data } = await nuevoPedido({
@@ -103,10 +114,12 @@ const NuevoPedido = () => {
             </div>
         )
     };
+    
 
     return (
-        <Layout>
 
+        isAuthenticated &&
+        <Layout>
             <h1 className="text-2xl text-gray-800 font-light">Nuevo Pedido</h1>
 
             { mensaje && mostrarMensaje() }
@@ -127,7 +140,6 @@ const NuevoPedido = () => {
                     </button>
                 </div>
             </div>
-
         </Layout>
     )
 };

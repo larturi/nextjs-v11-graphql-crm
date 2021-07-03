@@ -19,11 +19,9 @@ const Index = () => {
     }
   });
 
-  console.log(data);
-
-  // if(!loading && !data.obtenerClientesVendedor) {
-  //   router.push('/login');
-  // }
+  if(!loading && !data.obtenerClientesVendedor) {
+    router.push('/login');
+  }
 
   return (
     <>

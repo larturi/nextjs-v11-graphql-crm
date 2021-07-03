@@ -1,12 +1,19 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useRouter } from 'next/router';
 
 import { useQuery } from '@apollo/client';
 import { OBTENER_USUARIO } from '../config/gql';
 
+// Context de Auth
+import AuthContext from '../context/auth/AuthContext';
+
 const Header = () => {
 
     const router = useRouter();
+
+    // Utilizar Context Auth
+    const authContext = useContext(AuthContext);
+    const { logout } = authContext;
 
     const { data, loading, error } = useQuery(OBTENER_USUARIO);
 
@@ -14,6 +21,7 @@ const Header = () => {
 
     const cerrarSesion = () => {
         localStorage.removeItem('token');
+        logout();
         router.push('/login');
     }
 

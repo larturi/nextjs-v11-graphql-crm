@@ -5,13 +5,16 @@ import '../styles/globals.css';
 import 'tailwindcss/tailwind.css';
 
 import PedidoState from '../context/pedidos/pedidoState';
+import AuthState from '../context/auth/AuthState';
 
 const MyApp = ({ Component, pageProps }) => {
   return (
     <ApolloProvider client={client}>
-      <PedidoState>
-        <Component {...pageProps} />
-      </PedidoState>
+      <AuthState>
+        <PedidoState>
+          <Component {...pageProps} />
+        </PedidoState>
+      </AuthState>
     </ApolloProvider>
   )
 }

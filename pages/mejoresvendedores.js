@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
+import { useRouter } from 'next/router';
 import Layout from '../components/Layout';
 
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
@@ -16,7 +17,22 @@ const MEJORES_VENDEDORES = gql`
     }
 `;
 
+// Context de Auth
+import AuthContext from '../context/auth/AuthContext';
+
 const MejoresVendedores = () => {
+
+    const router = useRouter();
+
+    // Utilizar Context Auth
+    const authContext = useContext(AuthContext);
+    const { isAuthenticated } = authContext;
+
+    useEffect(() => {
+        if (!isAuthenticated) {
+            router.push('/login');  
+        }
+    }, []);
 
     const { data, loading, error, startPolling, stopPolling } = useQuery(MEJORES_VENDEDORES);
 
@@ -47,6 +63,7 @@ const MejoresVendedores = () => {
     });
 
     return (
+        isAuthenticated &&
         <Layout>
             <h1 className="text-2xl text-gray-800 font-light">Mejores Vendedores</h1>
 

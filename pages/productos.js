@@ -1,5 +1,8 @@
-import { gql, useQuery } from '@apollo/client';
+import React, { useEffect, useContext } from 'react';
+
+import { useQuery } from '@apollo/client';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 import Producto from '../components/Producto';
 import Layout from '../components/Layout';
@@ -7,20 +10,36 @@ import { Loading } from '../components/Loading';
 
 import { OBTENER_PRODUCTOS } from '../config/gql';
 
+// Context Auth
+import AuthContext from '../context/auth/AuthContext';
+
 const Productos = () => {
+
+  const router = useRouter();
+
+  // Utilizar Context Auth
+  const authContext = useContext(AuthContext);
+  const { isAuthenticated } = authContext;
+
+  useEffect(() => {
+      if (!isAuthenticated) {
+          router.push('/login');  
+      }
+  }, []);
 
   // Consultar los productos
   const { data, loading, error } = useQuery(OBTENER_PRODUCTOS, {
     variables: {
       eliminado: false
     }
-});
+  });
 
   if (loading) {
     return 'Cargando...';
   } else {
 
     return (
+      isAuthenticated &&
       <div>
         <Layout>
           <h1 className="text-2xl text-gray-800 font-light">Productos</h1>

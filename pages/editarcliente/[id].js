@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
 
 import { gql, useQuery, useMutation } from '@apollo/client';
@@ -9,10 +9,24 @@ import Swal from 'sweetalert2';
 import Layout from '../../components/Layout';
 import { OBTENER_CLIENTE, ACTUALIZAR_CLIENTE } from '../../config/gql';
 
+// Context de Auth
+import AuthContext from '../../context/auth/AuthContext';
+
 const EditarCliente = () => {
 
     const router = useRouter();
     const { query: { id} } = router;
+
+    // Utilizar Context Auth
+    const authContext = useContext(AuthContext);
+    const { isAuthenticated } = authContext;
+
+    useEffect(() => {
+        if (!isAuthenticated) {
+            router.push('/login');  
+        }
+    }, []);
+
 
     // Obtengo el cliente para precargar el formulario
     const { data, loading, error } = useQuery(OBTENER_CLIENTE, {
@@ -79,6 +93,7 @@ const EditarCliente = () => {
         const { obtenerCliente } = data;
 
         return (
+            isAuthenticated &&
             <Layout>
                 <h1 className="text-2xl text-gray-800 font-light">Editar Cliente</h1>
 

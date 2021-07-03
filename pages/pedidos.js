@@ -1,11 +1,28 @@
+import React, { useEffect, useContext } from 'react';
 import Layout from '../components/Layout';
 import Link from 'next/link';
-import { gql, useQuery } from '@apollo/client';
+import { useRouter } from 'next/router';
+import { useQuery } from '@apollo/client';
 import Pedido from '../components/pedidos/pedido';
 
 import { OBTENER_PEDIDOS_VENDEDOR } from '../config/gql';
 
+// Context Auth
+import AuthContext from '../context/auth/AuthContext';
+
 const Pedidos = () => {
+
+  const router = useRouter();
+
+  // Utilizar Context Auth
+  const authContext = useContext(AuthContext);
+  const { isAuthenticated } = authContext;
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+        router.push('/login');  
+    }
+  }, []);
 
   const { data, loading, error } = useQuery(OBTENER_PEDIDOS_VENDEDOR);
   
@@ -14,6 +31,7 @@ const Pedidos = () => {
   const { obtenerPedidosVendedor } = data;
 
   return (
+    isAuthenticated &&
     <div>
       <Layout>
         <h1 className="text-2xl text-gray-800 font-light">Pedidos</h1>
@@ -23,7 +41,7 @@ const Pedidos = () => {
         </Link>
 
         {
-          obtenerPedidosVendedor.length === 0 ? (
+          isAuthenticated && obtenerPedidosVendedor.length === 0 ? (
             <p className="mt-5 text-center text-2xl">No hay pedidos</p>
           ) : (
             obtenerPedidosVendedor.map(pedido => (
