@@ -98,10 +98,12 @@ const NuevoPedido = () => {
             );
 
         } catch (error) {
-            setMensaje(error.message.replace('GraphQL error:', ''));
-            setTimeout(() => {
-                setMensaje(null);
-            }, 3000);
+            router.push('/pedidos');
+            // setMensaje(error.message.replace('GraphQL error:', ''));
+            // Redirect
+            // setTimeout(() => {
+            //     setMensaje(null);
+            // }, 3000);
         }
     };
 
