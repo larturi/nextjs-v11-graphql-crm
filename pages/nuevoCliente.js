@@ -18,11 +18,19 @@ const NuevoCliente = () => {
     const [ nuevoCliente ] = useMutation(NUEVO_CLIENTE, {
         update(cache, { data: { nuevoCliente }}) {
             // Obtener el objeto de cache que vamos a actualizar
-            const { obtenerClientesVendedor } = cache.readQuery({ query: OBTENER_CLIENTES_USUARIO });
+            const { obtenerClientesVendedor } = cache.readQuery({ 
+                query: OBTENER_CLIENTES_USUARIO,
+                variables: {
+                    eliminado: false
+                }
+            });
 
             // Reescribo el cache (es inmutable)
             cache.writeQuery({
                 query: OBTENER_CLIENTES_USUARIO,
+                variables: {
+                    eliminado: false
+                },
                 data: {
                     obtenerClientesVendedor: [ ...obtenerClientesVendedor, nuevoCliente ]
                 }

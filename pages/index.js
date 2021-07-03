@@ -13,11 +13,17 @@ const Index = () => {
 
   const router = useRouter();
 
-  const { data, loading, error } = useQuery(OBTENER_CLIENTES_USUARIO);
+  const { data, loading, error } = useQuery(OBTENER_CLIENTES_USUARIO, {
+    variables: {
+      eliminado: false
+    }
+  });
 
-  if(!loading && !data.obtenerClientesVendedor) {
-    router.push('/login');
-  }
+  console.log(data);
+
+  // if(!loading && !data.obtenerClientesVendedor) {
+  //   router.push('/login');
+  // }
 
   return (
     <>

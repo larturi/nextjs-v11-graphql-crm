@@ -11,11 +11,19 @@ const Cliente = ({ cliente }) => {
     const [ eliminarCliente ] = useMutation(ELIMINAR_CLIENTE, {
         update(cache) {
             // Obtener una copia del objeto en cache
-            const { obtenerClientesVendedor } = cache.readQuery({ query: OBTENER_CLIENTES_USUARIO });
+            const { obtenerClientesVendedor } = cache.readQuery({ 
+                query: OBTENER_CLIENTES_USUARIO,
+                variables: {
+                    eliminado: false
+                }
+            });
 
             // Reescribir el cache
             cache.writeQuery({
                 query: OBTENER_CLIENTES_USUARIO,
+                variables: {
+                    eliminado: false
+                },
                 data: {
                     obtenerClientesVendedor: obtenerClientesVendedor.filter( cliente => cliente.id !== id)
                 }

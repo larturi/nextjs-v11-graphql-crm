@@ -73,8 +73,8 @@ export const NUEVO_CLIENTE = gql`
 `;
 
 export const OBTENER_CLIENTES_USUARIO = gql`
-    query obtenerClientesVendedor{
-        obtenerClientesVendedor{
+    query obtenerClientesVendedor($eliminado: Boolean!) {
+        obtenerClientesVendedor(eliminado: $eliminado) {
             id
             nombre
             apellido

@@ -13,11 +13,11 @@ import Total from '../components/pedidos/Total';
 import { OBTENER_PEDIDOS_VENDEDOR } from '../config/gql';
 
 const NUEVO_PEDIDO = gql`
-    mutation nuevoPedido($input: PedidoInput){
-        nuevoPedido(input:$input) {
-        id
-        }
-    }
+  mutation nuevoPedido($input: PedidoInput){
+    nuevoPedido(input:$input) {
+      id
+    }    
+  }
 `;
 
 // Context de Pedidos
@@ -37,11 +37,17 @@ const NuevoPedido = () => {
     const [ nuevoPedido ] = useMutation(NUEVO_PEDIDO, {
         update(cache, { data: { nuevoPedido }}) {
             const { obtenerPedidosVendedor } = cache.readQuery({
-                query: OBTENER_PEDIDOS_VENDEDOR
+                query: OBTENER_PEDIDOS_VENDEDOR,
+                variables: {
+                    eliminado: false
+                }
             });
 
             cache.writeQuery({
                 query: OBTENER_PEDIDOS_VENDEDOR,
+                variables: {
+                    eliminado: false
+                },
                 data: {
                     obtenerPedidosVendedor: [...obtenerPedidosVendedor, nuevoPedido]
                 }
@@ -56,7 +62,9 @@ const NuevoPedido = () => {
     const crearNuevoPedido = async () => {
         
         // Armo el arreglo de productos con lo que pide graphQL
-        const pedido = productos.map( ( {stock, creado, __typename, ...producto} ) => producto );
+        const pedido = productos.map( ( {stock, eliminado, creado, __typename, ...producto} ) => producto );
+
+        console.log(pedido);
 
         try {
             const { data } = await nuevoPedido({

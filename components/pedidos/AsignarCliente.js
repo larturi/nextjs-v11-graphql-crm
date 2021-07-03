@@ -13,7 +13,11 @@ const AsignarCliente = () => {
     const pedidoContext = useContext(PedidoContext);
     const { agregarCliente } = pedidoContext;
 
-    const { data, loading, error } = useQuery(OBTENER_CLIENTES_USUARIO);
+    const { data, loading, error } = useQuery(OBTENER_CLIENTES_USUARIO, {
+        variables: {
+            eliminado: false
+        }
+    });
 
     useEffect(() => {
         agregarCliente(cliente);
