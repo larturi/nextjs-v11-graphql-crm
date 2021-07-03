@@ -21,8 +21,8 @@ const Header = () => {
         <>
             {
                 (!loading && data.obtenerUsuario) ?
-                <div className="flex justify-between mb-6">
-                    <p className="mr-2">Hola { data.obtenerUsuario.nombre } 👋 </p>
+                <div className="sm:flex sm:justify-between mb-6">
+                    <p className="mr-2 mb-4 lg:mb-0">Hola { data.obtenerUsuario.nombre } 👋 </p>
 
                     <button
                         onClick={ () => cerrarSesion() }

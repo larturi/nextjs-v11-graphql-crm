@@ -49,6 +49,10 @@ const MejoresClientes = () => {
     return (
         <Layout>
             <h1 className="text-2xl text-gray-800 font-light">Mejores Clientes</h1>
+            <ResponsiveContainer
+                width={'99%'}
+                height={550}
+            >
                 <BarChart
                     className="mt-10"
                     width={600}
@@ -68,6 +72,7 @@ const MejoresClientes = () => {
                     <Legend />
                     <Bar dataKey="total" fill="#3182CE" />
                 </BarChart>
+            </ResponsiveContainer>
         </Layout>
     )
 };
