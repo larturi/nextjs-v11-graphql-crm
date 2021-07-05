@@ -35,7 +35,7 @@ const Productos = () => {
   });
 
   if (loading) {
-    return 'Cargando...';
+    return <Loading />;
   } else {
 
     return (

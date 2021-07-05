@@ -6,6 +6,7 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import Swal from 'sweetalert2';
 
+import { Loading } from '../../components/Loading';
 import Layout from '../../components/Layout';
 import { OBTENER_PRODUCTO, ACTUALIZAR_PRODUCTO } from '../../config/gql';
 
@@ -81,7 +82,7 @@ const EditarProducto = () => {
     };
 
     if (loading) {
-        return 'Cargando...';
+        return <Loading />;
     } else {
 
         const { obtenerProducto } = data;

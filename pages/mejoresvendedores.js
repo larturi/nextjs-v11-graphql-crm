@@ -1,6 +1,7 @@
 import React, { useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
 import Layout from '../components/Layout';
+import { Loading } from '../components/Loading';
 
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { gql, useQuery } from '@apollo/client';
@@ -44,7 +45,7 @@ const MejoresVendedores = () => {
     }, [startPolling, stopPolling]);
 
     if (loading) {
-        return <div>Cargando...</div>;
+        return <Loading />;
     }
 
     if (error) {

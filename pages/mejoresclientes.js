@@ -19,6 +19,7 @@ const MEJORES_CLIENTES = gql`
 
 // Context de Auth
 import AuthContext from '../context/auth/AuthContext';
+import { Loading } from '../components/Loading';
 
 const MejoresClientes = () => {
 
@@ -44,7 +45,7 @@ const MejoresClientes = () => {
     }, [startPolling, stopPolling]);
 
     if (loading) {
-        return <div>Cargando...</div>;
+        return <Loading />;
     }
 
     if (error) {

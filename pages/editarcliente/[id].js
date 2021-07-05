@@ -1,12 +1,13 @@
 import React, { useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
 
-import { gql, useQuery, useMutation } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import Swal from 'sweetalert2';
 
 import Layout from '../../components/Layout';
+import { Loading } from '../../components/Loading';
 import { OBTENER_CLIENTE, ACTUALIZAR_CLIENTE } from '../../config/gql';
 
 // Context de Auth
@@ -87,7 +88,7 @@ const EditarCliente = () => {
     };
 
     if (loading) {
-        return 'Cargando...';
+        return <Loading />;
     } else {
 
         const { obtenerCliente } = data;

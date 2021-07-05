@@ -9,6 +9,7 @@ import { OBTENER_PEDIDOS_VENDEDOR } from '../config/gql';
 
 // Context Auth
 import AuthContext from '../context/auth/AuthContext';
+import { Loading } from '../components/Loading';
 
 const Pedidos = () => {
 
@@ -26,7 +27,7 @@ const Pedidos = () => {
 
   const { data, loading, error } = useQuery(OBTENER_PEDIDOS_VENDEDOR);
   
-  if(loading) return 'Cargando...';
+  if(loading) return <Loading />;
 
   const { obtenerPedidosVendedor } = data;
 
