@@ -99,11 +99,6 @@ const NuevoPedido = () => {
 
         } catch (error) {
             router.push('/pedidos');
-            // setMensaje(error.message.replace('GraphQL error:', ''));
-            // Redirect
-            // setTimeout(() => {
-            //     setMensaje(null);
-            // }, 3000);
         }
     };
 
@@ -136,7 +131,7 @@ const NuevoPedido = () => {
                     <button
                         type="button"
                         onClick={ () => crearNuevoPedido() }
-                        className={` bg-gray-800 w-full mt-5 p-2 uppercase text-white font-bold hover:bg-gray-900 ${ validarPedido() }`}
+                        className={` bg-gray-800 mt-5 p-2 uppercase text-white w-full font-bold hover:bg-gray-900 ${ validarPedido() }`}
                     >
                         Registrar Pedido
                     </button>
