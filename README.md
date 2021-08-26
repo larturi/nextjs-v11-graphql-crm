@@ -3,7 +3,7 @@
 </h1>
 
 <h3 align="center">
-  -- Next, React, GrapQL, Mongo --
+  -- Next, React, GraphQL, Mongo --
 </h3>
 
 <h5 align="center">
