@@ -19,7 +19,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ### Docker
 
 ```bash
-docker build --build-arg NEXT_PUBLIC_API_URL=http://localhost:4005 -t  crm-next-apollo-frontend:latest .
+docker build --build-arg REACT_APP_BACKEND_URL=http://localhost:4005 -t  crm-next-apollo-frontend:latest .
 
 docker-compose up -d
 ```
