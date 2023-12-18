@@ -9,13 +9,13 @@ services:
       networks:
          - crm-next-apollo-network
 
-   frontend:
-      image: crm-next-apollo-frontend:latest
-      container_name: crm-next-apollo-frontend
-      ports:
-         - '8082:80'
-      networks:
-         - crm-next-apollo-network
+   # frontend:
+   #    image: crm-next-apollo-frontend:latest
+   #    container_name: crm-next-apollo-frontend
+   #    ports:
+   #       - '8082:80'
+   #    networks:
+   #       - crm-next-apollo-network
 
 networks:
    crm-next-apollo-network:
