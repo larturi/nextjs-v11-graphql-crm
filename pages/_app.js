@@ -4,7 +4,7 @@ import client from '../config/apollo';
 import '../styles/globals.css';
 import 'tailwindcss/tailwind.css';
 
-import PedidoState from '../context/pedidos/pedidoState';
+import PedidoState from '../context/pedidos/PedidoState';
 import AuthState from '../context/auth/AuthState';
 
 const MyApp = ({ Component, pageProps }) => {

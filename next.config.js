@@ -1,7 +1,5 @@
+/** @type {import('next').NextConfig} */
 module.exports = {
-    basePath: '/crm-next-apollo',
-    trailingSlash: true
+    output: 'standalone',
+    // basePath: '/crm-next-apollo',
 }
-
-
-// exportTrailingSlash: true -> Para que no haya problemas con las rutas

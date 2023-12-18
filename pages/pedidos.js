@@ -3,7 +3,7 @@ import Layout from '../components/Layout';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useQuery } from '@apollo/client';
-import Pedido from '../components/pedidos/pedido';
+import Pedido from '../components/pedidos/Pedido';
 
 import { OBTENER_PEDIDOS_VENDEDOR } from '../config/gql';
 
