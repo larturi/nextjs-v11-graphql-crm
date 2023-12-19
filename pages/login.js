@@ -59,8 +59,8 @@ const Login = () => {
             localStorage.setItem("token", token);
             setMensaje(null);
             login();
-            // router.push("/");
-            window.location.href = "/crm-next-apollo";
+            router.push("/");
+            // window.location.href = "/crm-next-apollo";
           }, 600);
         } else {
           console.error("Ha ocurrido un error");
